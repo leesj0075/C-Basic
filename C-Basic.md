@@ -322,6 +322,53 @@ for (초기식; 조건식; 증감식)
 }
 ```
 
+```c
+#include <stdio.h>
+
+int main()
+{
+
+  int n;
+  scanf("%d", &n);
+
+  //별이 증가하는 for문
+  for(int i = 0 ; i < n; i++)
+  {
+    //공백 출력하는 for문
+    for(int j = i; j < n-1 ; j++)
+    {
+      printf(" ");
+    }
+
+    //별을 출력하는 for문
+    for(int j = 0; j < 2 * i + 1; j++)
+    {
+      printf("*");
+    }
+    printf("\n");
+  }
+
+  //별이 감소하는 for문
+  for(int i = 1 ; i < n; i++)
+  {
+    //공백 출력하는 for문
+    for(int j = 0; j < i; j++)
+    {
+      printf(" ");
+    }
+
+    //별을 출력하는 for문
+    for(int j = 2 * n - 1; j > 2 * i; j--)
+    {
+      printf("*");
+    }
+    printf("\n");
+  }
+
+  return 0;
+}
+```
+
 ### * continue & break
 
 <br><br><br><br><br>
@@ -359,4 +406,199 @@ int sum(int x, int y)
 {
     return x + y;
 }
+```
+
+## - 지역변수와 전역변수
+
+```c
+#include <stdio.h>
+
+//전역변수
+int num1 = 10;
+int num2 = 20;
+
+
+//여기서 num1, num2는 전역변수 num1과 num2와 다르다.
+int add(int num1, int num2) // 지역변수
+{
+  return num1+num2;
+}
+
+int main()
+{
+  int result = add(num1, num2);
+  printf("%d", result);
+
+  return 0;
+}
+```
+
+<br><br><br><br><br>
+
+<hr>
+
+<br><br><br><br><br>
+
+# 배열
+
+## - 이런 경우 효율적일까?
+```c
+int score1 = 60;
+int score2 = 90;
+int score3 = 86;
+int score4 = 77;
+...
+int score112 = 54;
+int score113 = 65;
+```
+그래서 배열 필요하다.
+
+## - 배열
+```c
+int scores[] = {60,90,86,77,54,65}; //배열의 크기는 6
+printf("%d\n",scores[0]); //60
+printf("%d\n",scores[3]); //77
+
+int scores[1000];
+scores[0] = 60;
+scores[1] = 90;
+// {60, 90, 0, 0, 0, 0, 0, 0, 0, 0}
+```
+
+### * 배열에 담긴 값과 배열의 길이를 어떻게 알 수 있을까?
+
+```c
+#include <stdio.h>
+
+
+
+int main()
+{
+  int scores[] = {60,90,86,77,54,65}; //배열의 크기는 6
+  int scores1[] = {11,22,33,44,55}; //배열의 크기는 5
+  int scores2[] = {100,200,300}; //배열의 크기는 3
+  
+  
+  printf("[");
+  for(int i = 0; i < 6; i++)
+  {
+    if(i==5)
+    {
+      printf("%d",scores[i]);
+      break;
+    }
+    printf("%d, ",scores[i]);
+
+  }
+  printf("]\n");
+
+
+  printf("[");
+  for(int i = 0; i < 5; i++)
+  {
+    if(i==4)
+    {
+      printf("%d",scores1[i]);
+      break;
+    }
+    printf("%d, ",scores1[i]);
+    
+  }
+  printf("]\n");
+
+  printf("[");
+  for(int i = 0; i < 3; i++)
+  {
+    if(i==2)
+    {
+      printf("%d",scores2[i]);
+      break;
+    }
+    printf("%d, ",scores2[i]);
+    
+  }
+  printf("]\n");
+
+  return 0;
+}
+```
+### * 길이는 어떻게 하드코딩하지 않고 동적으로 변하게 할까
+
+```c
+#include <stdio.h>
+
+int main()
+{
+  int scores[] = {60,90,86}; 
+  //배열의 크기는 9
+
+  int length = sizeof(scores)/sizeof(scores[0]);
+  printf("The array's length is : %d\n", length);  
+  printf("[");
+  for(int i = 0; i < length; i++)
+  {
+    if(i==length - 1)
+    {
+      printf("%d",scores[i]);
+      break;
+    }
+    printf("%d, ",scores[i]);
+
+  }
+  printf("]\n");
+
+
+  return 0;
+}
+```
+
+### * 배열을 어떻게 정렬시킬까?
+
+#### 오름차순
+
+```c
+#include <stdio.h>
+
+int main()
+{
+  int nums[] = {6,2,9,5,8,1,3};
+  //오름차순 {1,2,3,5,6,8,9}
+  //내림차순 {9,8,6,5,3,2,1}
+
+  for(int i = 0; i < sizeof(nums)/sizeof(int) - 1; i++)
+  {
+    for(int j = i + 1; j < sizeof(nums)/sizeof(int); j++)
+    {
+      if(nums[i] > nums[j])
+      {
+        int temp = nums[i];
+        nums[i] = nums[j]; 
+        nums[j] = temp; 
+      }
+    }
+  }
+
+  int length = sizeof(nums)/sizeof(nums[0]);
+  printf("The array's length is : %d\n", length);  
+  printf("[");
+  for(int i = 0; i < length; i++)
+  {
+    if(i==length - 1)
+    {
+      printf("%d",nums[i]);
+      break;
+    }
+    printf("%d, ",nums[i]);
+
+  }
+  printf("]\n");
+
+  return 0;
+}
+```
+
+#### 내림차순
+
+```c
+
 ```
