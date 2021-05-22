@@ -453,7 +453,7 @@ int score113 = 65;
 ```
 그래서 배열 필요하다.
 
-## - 배열
+## - 1차원 배열
 ```c
 int scores[] = {60,90,86,77,54,65}; //배열의 크기는 6
 printf("%d\n",scores[0]); //60
@@ -600,5 +600,334 @@ int main()
 #### 내림차순
 
 ```c
+#include <stdio.h>
 
+int main()
+{
+  int nums[] = {6,2,9,5,8,1,3};
+  //오름차순 {1,2,3,5,6,8,9}
+  //내림차순 {9,8,6,5,3,2,1}
+
+  for(int i = 0; i < sizeof(nums)/sizeof(int) - 1; i++)
+  {
+    for(int j = i + 1; j < sizeof(nums)/sizeof(int); j++)
+    {
+      if(nums[i] < nums[j])
+      {
+        int temp = nums[i];
+        nums[i] = nums[j]; 
+        nums[j] = temp; 
+      }
+    }
+  }
+
+  int length = sizeof(nums)/sizeof(nums[0]);
+  printf("The array's length is : %d\n", length);  
+  printf("[");
+  for(int i = 0; i < length; i++)
+  {
+    if(i==length - 1)
+    {
+      printf("%d",nums[i]);
+      break;
+    }
+    printf("%d, ",nums[i]);
+
+  }
+  printf("]\n");
+
+  return 0;
+}
+```
+
+## - 다차원 배열
+
+배열안에 또 배열이 있다.
+
+```c
+#include <stdio.h>
+
+int main(){
+  int oneArr[6] = {10, 20, 30, 40, 50, 60};
+
+  int twoArr[2][3] = {
+    {10, 20, 30},
+    {40, 50, 60}
+  };
+
+  int threeArr[3][2][1] = {
+    {
+      {10}, {20}
+    },
+    {
+      {30}, {40}
+    },
+    {
+      {50}, {60}
+    }
+  };
+
+}
+```
+
+### * 2차원 배열이란
+
+```c
+#include <stdio.h>
+
+int main(){
+  int oneArr[6] = {10, 20, 30, 40, 50, 60};
+
+  int twoArr[2][3] = {
+    {10, 20, 30},
+    {40, 50, 60}
+  };
+  
+  int twoArr2[2][3] = {10, 20, 30, 40, 50, 60};
+
+  printf("oneArr의 크기 \t\t\t%d\n", sizeof(oneArr));
+  printf("oneArr[0]의 크기 \t\t%d\n", sizeof(oneArr[0]));
+  printf("oneArr[0]의 길이 \t\t%d\n", sizeof(oneArr)/sizeof(oneArr[0]));
+  
+  printf("twoArr의 크기 \t\t\t%d\n", sizeof(twoArr));
+  printf("twoArr[0]의 크기 \t\t%d\n", sizeof(twoArr[0]));
+  printf("twoArr[0]의 길이 \t\t%d\n", sizeof(twoArr)/sizeof(twoArr[0]));
+
+  printf("twoArr2의 크기 \t\t\t%d\n", sizeof(twoArr2));
+  printf("twoArr2[0]의 크기 \t\t%d\n", sizeof(twoArr2[0]));
+  printf("twoArr2[0]의 길이 \t\t%d\n", sizeof(twoArr2)/sizeof(twoArr2[0]));
+
+}
+```
+
+<br><br><br><br><br>
+
+<hr>
+
+<br><br><br><br><br>
+
+# 구조체
+
+사용자가 정의하는 새로운 타입
+
+
+## - 구조체 정의하기&선언하기
+
+```c
+#include <stdio.h>
+
+struct human
+{
+    char name[10];
+    int age;
+};
+
+int main()
+{
+  struct human student = {"Eddie", 15};
+  struct human businessman = {.age=30,.name="Alice"};
+
+  printf("이 사람의 이름은 %s이며, 나이는 %d입니다.\n",
+          student.name, student.age);
+
+  printf("이 사람의 이름은 %s이며, 나이는 %d입니다.\n",
+          businessman.name, businessman.age);
+
+  return 0;
+}
+```
+
+### * 함수로 구조체를 매개변수로 받는 방법
+ 
+```c
+#include <stdio.h>
+
+struct human
+{
+    char name[10];
+    int age;
+};
+
+void info(struct human someone)
+{
+  printf("이 사람의 이름은 %s이며, 나이는 %d입니다.\n",
+        someone.name, someone.age);
+}
+
+int main()
+{
+
+  struct human student = {"Eddie", 15};
+  struct human businessman = {.age=30,.name="Alice"};
+  struct human programmer = {.age=25,.name="Rhie"};
+  struct human teacher = {.age=15,.name="SJ"};
+
+  info(student);
+  info(businessman);
+  info(programmer);
+  info(teacher);
+  
+
+  return 0;
+}
+```
+
+## - typedef
+typedef를 이용해 좀더 편리하게 구조체로 정의한 타입 사용하기
+
+```c
+#include <stdio.h>
+
+struct human
+{
+    char name[10];
+    int age;
+};
+
+typedef struct human HUMAN;
+
+void info(HUMAN someone)
+{
+  printf("이 사람의 이름은 %s이며, 나이는 %d입니다.\n",
+        someone.name, someone.age);
+}
+
+int main()
+{
+
+  HUMAN student = {"Eddie", 15};
+  HUMAN businessman = {.age=30,.name="Alice"};
+  HUMAN programmer = {.age=25,.name="Rhie"};
+  HUMAN teacher = {.age=15,.name="SJ"};
+
+  info(student);
+  info(businessman);
+  info(programmer);
+  info(teacher);
+  
+
+  return 0;
+}
+```
+
+구조체 선언과 typedef 선언을 동시에 하자
+
+```c
+#include <stdio.h>
+
+typedef struct
+{
+    char name[10];
+    int age;
+}HUMAN;
+
+
+void info(HUMAN someone)
+{
+  printf("이 사람의 이름은 %s이며, 나이는 %d입니다.\n",
+        someone.name, someone.age);
+}
+
+int main()
+{
+
+  HUMAN student = {"Eddie", 15};
+  HUMAN businessman = {.age=30,.name="Alice"};
+  HUMAN programmer = {.age=25,.name="Rhie"};
+  HUMAN teacher = {.age=15,.name="SJ"};
+
+  info(student);
+  info(businessman);
+  info(programmer);
+  info(teacher);
+  
+
+  return 0;
+}
+```
+
+## - 구조체 배열 활용
+
+```c
+#include <stdio.h>
+
+typedef struct
+{
+    char name[10];
+    int age;
+}HUMAN;
+
+
+void info(HUMAN someone)
+{
+  printf("이 사람의 이름은 %s이며, 나이는 %d입니다.\n",
+        someone.name, someone.age);
+}
+
+int main()
+{
+
+  HUMAN humans[4] = {
+    {"Eddie", 15},
+    {.age=30,.name="Alice"},
+    {.age=25,.name="Rhie"},
+    {.age=15,.name="SJ"}
+  };
+
+  int len = sizeof(humans) / sizeof(humans[0]);
+
+  for (int i = 0; i < len; i++)
+  {
+    info(humans[i]);
+  }
+
+  return 0;
+}
+```
+
+## - 구체체 안에 구조체
+
+```c
+#include <stdio.h>
+
+typedef struct
+{
+  char reg_num[30];
+  char issue_addr[10];
+  char country[20];
+}IDENTITY;
+
+typedef struct
+{
+    char name[10];
+    int age;
+    IDENTITY identity;
+}HUMAN;
+
+
+void info(HUMAN someone)
+{
+  printf("이 사람의 이름은 %s이며, 나이는 %d입니다.\n",someone.name, someone.age);
+  printf("그리고 신분증 정보는 다음과 같습니다. [주민번호:%s, 발급지:%s, 국적:%s]\n"
+    ,someone.identity.reg_num, someone.identity.issue_addr, someone.identity.country);
+}
+
+int main()
+{
+
+  HUMAN humans[3] = {
+    {"Eddie", 15, {"1234", "서울", "한국"}},
+    {.age=30,.name="Alice",.identity={.reg_num="2345", .issue_addr="뉴욕",.country="미국"}},
+    {.age=15,.name="SJ",.identity={.reg_num="3456", .issue_addr="대전",.country="한국"}}
+  };
+
+  int len = sizeof(humans) / sizeof(humans[0]);
+
+  for (int i = 0; i < len; i++)
+  {
+    info(humans[i]);
+  }
+
+  return 0;
+}
 ```
