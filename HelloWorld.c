@@ -1,93 +1,103 @@
 #include <stdio.h>
 
-int main(){
 
-  int square_length;
+//영어 대문자 : 65 ~ 90
+//영어 소문자 : 97 ~ 122
 
-	printf("정방 행렬의 크기는?");
-	scanf("%d", &square_length);
+int isUppercase(char ch)
+{
+  return ch >= 65 && ch <= 90;
+}
 
-  int matrixA[square_length][square_length];
-  int matrixB[square_length][square_length];
+int isLowercase(char ch)
+{
+  return ch >= 97 && ch <= 122;
+}
 
-  printf("%d X %d 크기의 첫번째 행렬에 들어갈 숫자를 입력하세요.\n",square_length, square_length);
-  printf("[예를들어, 3 X 3 행렬이라면 1 2 3 4 5 6 7 8 9] :");
-  for(int i=0; i<square_length; i++)
+int encrypt(char ch, int key)
+{
+  //65 ~ 90
+  if(isUppercase(ch))
   {
-    for(int j=0; j<square_length; j++)
+    ch += key;
+    if(ch > 90)
     {
-      scanf("%d", &matrixA[i][j]);
+      int over_num = ch - 90;
+      ch = 64 + over_num;
     }
   }
-
-  printf("%d X %d 크기의 두번째 행렬에 들어갈 숫자를 입력하세요.\n",square_length, square_length);
-  printf("[예를들어, 3 X 3 행렬이라면 1 2 3 4 5 6 7 8 9] :");
-  for(int i=0; i<square_length; i++)
+  //97 ~ 122
+  else if(isLowercase(ch))
   {
-    for(int j=0; j<square_length; j++)
+    ch += key;
+    if(ch > 122)
     {
-      scanf("%d", &matrixB[i][j]);
+      int over_num = ch - 122;
+      ch = 96 + over_num;
     }
   }
+  return ch;
 
-	printf("1번째 배열입니다.\n");
-  for(int i=0; i<square_length; i++)
+}
+
+int decrypt(char ch, int key)
+{
+   //65 ~ 90
+  if(isUppercase(ch))
   {
-    for(int j=0; j<square_length; j++)
+    ch -= key;
+    if(ch < 65)
     {
-      printf("%d ", matrixA[i][j]);
+      int over_num = 65 - ch;
+      ch = 91 - over_num;
     }
-    printf("\n");
+  }
+  //97 ~ 122
+  else if(isLowercase(ch))
+  {
+    ch -= key;
+    if(ch < 97)
+    {
+      int over_num = 97 - ch;
+      ch = 123 - over_num;
+    }
+  }
+  return ch;
+}
+
+int main()
+{
+  char plain[] = "xy ab ejfien dkv";
+  int key = 3;
+
+  printf("원본의 내용 : %s\n",plain);
+
+  //문자열 길이 구하기
+  int length = 0;
+  int index = 0;
+  while(plain[index] != '\0')
+  {
+    length++;
+    index++;
   }
 
+  printf("원본의 길이 : %d\n", length);
 
-	printf("2번째 배열입니다.\n");
-  for(int i=0; i<square_length; i++)
+  char E[length];
+  for(int i = 0; i < length; i++)
   {
-    for(int j=0; j<square_length; j++)
-    {
-      printf("%d ", matrixB[i][j]);
-    }
-    printf("\n");
+    E[i] = encrypt(plain[i], key);
   }
 
+  printf("암호화한 후의 내용 : %s\n",E);
 
-	printf("행렬의 합 \n");
-  for(int i=0; i<square_length; i++)
+  char D[length];
+  for(int i = 0; i < length; i++)
   {
-    for(int j=0; j<square_length; j++)
-    {
-      printf("%d ", matrixA[i][j] + matrixB[i][j]);
-    }
-    printf("\n");
+    D[i] = decrypt(E[i], key);
   }
 
-	printf("행렬의 차\n");
-  for(int i=0; i<square_length; i++)
-  {
-    for(int j=0; j<square_length; j++)
-    {
-      printf("%d ", matrixA[i][j] - matrixB[i][j]);
-    }
-    printf("\n");
-  }
+    printf("해독한 후의 내용 : %s\n",D);
 
-	printf("행렬의 곱\n");
-  int a = 1;
-  for(int i = 0; i < square_length; i++)
-  {
-    a--;
-    for(int j = 0; j < square_length; j++)
-    {
-      int sum = 0;
-      for(int k = 0; k < square_length; k++)
-      {
-        sum += matrixA[i][k] * matrixB[k][i+a+j];
-      }
-      printf("%d ", sum);
-    }
-    printf("\n");
-  }
-
-
+  return 0;
 }
